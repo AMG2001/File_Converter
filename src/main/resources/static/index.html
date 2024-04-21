@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AMG File Converter</title>
+    <link href="style/style.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h2>Java based - File Converter Service</h2>
+
+<button id="btn_docxToPdf" class="button-27" role="button">Docx to Pdf</button>
+<button id="btn_pdfToImages" class="button-27" role="button">PDF to Images</button>
+
+
+<!-- Import Custom 2js Files -->
+<script src="js/endpointsCaller.js"></script>
+<!-- Adding Action to Buttons -->
+<script>
+    $('#btn_docxToPdf').click(function () {
+        docxToPdfConverter();
+    });
+
+    $('#btn_pdfToImages').click(function () {
+        pdfToImagesConverter();
+    })
+</script>
+</body>
+</html>
