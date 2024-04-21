@@ -20,6 +20,8 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class FileConverter {
 
+    // TODO remain there is an error !!
+
     public byte[] convertDocxToPdf(byte[] docxFile) {
         try {
             // Load the .docx file with Docx4j
@@ -44,6 +46,7 @@ public class FileConverter {
 
             for (int page = 0; page < pageCount; ++page) {
                 BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+                System.out.println("Page Number: " + (page + 1) + "Processed");
                 images.add(bim);
             }
 

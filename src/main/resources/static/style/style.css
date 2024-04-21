@@ -1,7 +1,24 @@
 /* CSS */
 body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%; /* Adjust the width as needed */
     align-content: center;
-    width: 100%;
+}
+
+td {
+    border: none;
+    padding: 10px; /* Add some padding for better appearance */
 }
 
 .button-27 {

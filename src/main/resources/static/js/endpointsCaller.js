@@ -38,47 +38,57 @@ function docxToPdfConverter() {
 
 function pdfToImagesConverter() {
     console.log("Pdf to images Called");
-    // Create an input element dynamically
     var input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.pdf'; // Set the accept attribute to .pdf
+    input.accept = '.pdf';
 
-    // Add an event listener to handle the file selection
     input.onchange = function (event) {
         var file = event.target.files[0];
         var formData = new FormData();
         formData.append('file', file);
-        formData.append('filename', file.name); // Include the original filename
+        formData.append('filename', file.name);
+
+        // Update the text to "Uploading..."
+        document.getElementById('txt_pdfToImages').textContent = 'Uploading...';
+
         $.ajax({
             url: 'http://localhost:8080/convertPdfToImages',
             type: 'POST',
             data: formData,
-            processData: false, // tell jQuery not to process the data
-            contentType: false, // tell jQuery not to set contentType
-            // Make sure to set the responseType to 'blob'
+            processData: false,
+            contentType: false,
             xhrFields: {
                 responseType: 'blob'
             },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener('progress', function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = (evt.loaded / evt.total) * 100;
+                        // Update the text to show the upload progress
+                        document.getElementById('txt_pdfToImages').textContent = 'Uploading: ' + percentComplete.toFixed(2) + '%';
+                    }
+                }, false);
+                return xhr;
+            },
             success: function (data) {
-                // Create a Blob from the zip bytes
+                // Update the text to "Processing..."
+                document.getElementById('txt_pdfToImages').textContent = 'Processing...';
+
                 var blob = new Blob([data], {type: 'application/zip'});
-                // Create a URL from the Blob
                 var url = URL.createObjectURL(blob);
-                // Create a link element
                 var link = document.createElement('a');
                 link.href = url;
-                // Set the download attribute to the desired file name
                 link.download = file.name.replace('.pdf', '.zip');
-                // Append the link to the body
                 document.body.appendChild(link);
-                // Trigger the click event on the link
                 link.click();
-                // Remove the link from the body
                 document.body.removeChild(link);
+
+                // Update the text to "Downloading..."
+                document.getElementById('txt_pdfToImages').textContent = 'Downloading...';
             }
         });
     };
 
-    // Trigger the file dialog programmatically
     input.click();
 }

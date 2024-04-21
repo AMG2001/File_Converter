@@ -9,13 +9,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tech.amg.firstboot.controller.service.EmailService;
-import tech.amg.firstboot.controller.service.FileConverter;
+import tech.amg.fileConverter.controller.service.EmailService;
+import tech.amg.fileConverter.controller.service.FileConverter;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -36,6 +33,7 @@ public class FileConverterEndPoint {
     public FileConverterEndPoint(FileConverter fileConversionService) {
         this.fileConversionService = fileConversionService;
     }
+
 
     @GetMapping("/")
     public ResponseEntity<Resource> index() throws MalformedURLException {
@@ -73,9 +71,11 @@ public class FileConverterEndPoint {
     }
 
 
+    @CrossOrigin(origins = "http://localhost:63342")
     @PostMapping("/convertPdfToImages")
     public ResponseEntity<byte[]> convertPdfToImages(@RequestParam("file") MultipartFile pdfFile, @RequestParam("filename") String filename) {
         try {
+            System.out.println("Convert pdf to images called");
             byte[] imagesZip = fileConversionService.convertPdfToImages(pdfFile.getBytes());
             return ResponseEntity.ok()
                     .header("Content-Disposition", "attachment; filename=" + filename + ".zip")
