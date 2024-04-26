@@ -18,8 +18,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:63342")
 public class FileConverterEndPoint {
 
     @Value("${spring.mail.username}")
@@ -69,7 +72,6 @@ public class FileConverterEndPoint {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:63342")
     @PostMapping("/convertPdfToImages")
     public ResponseEntity<byte[]> convertPdfToImages(@RequestParam("file") MultipartFile pdfFile, @RequestParam("filename") String filename) {
         try {
@@ -82,4 +84,24 @@ public class FileConverterEndPoint {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @PostMapping("/convertImagesToPdf")
+    public ResponseEntity<byte[]> convertImagesToPdf(@RequestParam("files") List<MultipartFile> imageFiles) {
+        try {
+            System.out.println("Convert images to PDF called");
+            // Convert each MultipartFile to a byte array
+            List<byte[]> imagesBytes = new ArrayList<>();
+            for (MultipartFile imageFile : imageFiles) {
+                imagesBytes.add(imageFile.getBytes());
+            }
+            // Call the service method with the list of byte arrays
+            byte[] pdfBytes = fileConversionService.convertImagesToPdf(imagesBytes);
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=converted.pdf")
+                    .body(pdfBytes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
+

@@ -20,12 +20,21 @@
         <td>
             <p id="txt_docxToPdf">txt_docxToPdf</p>
         </td>
+    </tr>
     <tr>
         <td>
             <button id="btn_pdfToImages" class="button-27" role="button">PDF to Images</button>
         </td>
         <td>
             <p id="txt_pdfToImages">txt_pdfToImages</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button id="btn_imagesToPdf" class="button-27" role="button">Images to Pdf</button>
+        </td>
+        <td>
+            <p id="txt_imagesToPdf">txt_imagesToPdf</p>
         </td>
     </tr>
 </table>
@@ -41,6 +50,9 @@
 
     $('#btn_pdfToImages').click(function () {
         pdfToImagesConverter();
+    })
+    $('#btn_imagesToPdf').click(function () {
+        convertImagesToPdf();
     })
 </script>
 </body>
