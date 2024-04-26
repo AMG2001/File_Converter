@@ -62,11 +62,9 @@ public class FileConverterEndPoint {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-
         // Change the extension of the original filename to .pdf
         String pdfFilename = filename.substring(0, filename.lastIndexOf('.')) + ".pdf";
         headers.setContentDispositionFormData("filename", pdfFilename);
-
         return new ResponseEntity<>(pdfFile, headers, HttpStatus.OK);
     }
 

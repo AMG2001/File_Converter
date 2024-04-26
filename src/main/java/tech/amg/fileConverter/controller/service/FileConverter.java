@@ -20,8 +20,7 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class FileConverter {
 
-    // TODO remain there is an error !!
-
+    // TODO there is an error !!
     public byte[] convertDocxToPdf(byte[] docxFile) {
         try {
             // Load the .docx file with Docx4j
@@ -43,13 +42,13 @@ public class FileConverter {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             int pageCount = document.getNumberOfPages();
             List<BufferedImage> images = new ArrayList<>();
-
             for (int page = 0; page < pageCount; ++page) {
-                BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 80, ImageType.RGB);
                 System.out.println("Page Number: " + (page + 1) + "Processed");
                 images.add(bim);
+                // Dispose of the image after adding it to the list
+                bim.flush();
             }
-
             // Convert images to byte array and zip them
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(baos);
@@ -70,7 +69,5 @@ public class FileConverter {
             return baos.toByteArray();
         }
     }
-
-
 }
 

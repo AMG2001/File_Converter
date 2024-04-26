@@ -60,13 +60,16 @@ function pdfToImagesConverter() {
             xhrFields: {
                 responseType: 'blob'
             },
-            xhr: function() {
+            xhr: function () {
                 var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener('progress', function(evt) {
+                xhr.upload.addEventListener('progress', function (evt) {
                     if (evt.lengthComputable) {
                         var percentComplete = (evt.loaded / evt.total) * 100;
                         // Update the text to show the upload progress
                         document.getElementById('txt_pdfToImages').textContent = 'Uploading: ' + percentComplete.toFixed(2) + '%';
+                        if (!isNaN(Number(percentComplete)) && Number(percentComplete) === 100) {
+                            document.getElementById('txt_pdfToImages').textContent = 'processing';
+                        }
                     }
                 }, false);
                 return xhr;
