@@ -37,23 +37,47 @@
             <p id="txt_imagesToPdf">txt_imagesToPdf</p>
         </td>
     </tr>
+    <!--    ####################### EPUB <-> PDF #######################-->
+    <tr>
+        <td>
+            <button id="btn_epubToPdf" class="button-27" role="button">EPUB to Pdf</button>
+        </td>
+        <td>
+            <p id="txt_epubToPdf"></p>
+        </td>
+    </tr>
+    <!--    Image to Text -->
+    <tr>
+        <td>
+            <button id="btn_imageToText" class="button-27" role="button">Image To Text</button>
+        </td>
+        <td>
+            <p id="txt_imageToText"></p>
+        </td>
+    </tr>
 </table>
 
 
 <!-- Import Custom 2js Files -->
 <script src="js/endpointsCaller.js"></script>
+<script src="js/epub_pdf.js"></script>
 <!-- Adding Action to Buttons -->
 <script>
     $('#btn_docxToPdf').click(function () {
         docxToPdfConverter();
     });
-
     $('#btn_pdfToImages').click(function () {
         pdfToImagesConverter();
-    })
+    });
     $('#btn_imagesToPdf').click(function () {
         convertImagesToPdf();
-    })
+    });
+    $('#btn_epubToPdf').click(function () {
+        convertEPUB_to_PDF();
+    });
+    $('#btn_imageToText').click(function () {
+        imageToTextConverter();
+    });
 </script>
 </body>
 </html>

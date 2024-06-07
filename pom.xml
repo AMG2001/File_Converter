@@ -12,7 +12,7 @@
     <groupId>tech.amg</groupId>
     <artifactId>fileConverter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>fileConverter</name>
     <description>Custom File Converter - Implemented by AMG .</description>
     <properties>
@@ -23,6 +23,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,15 +88,6 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.0</version>
         </dependency>
-
-        <dependency>
-            <!--            library for working with PDF documents, providing functionality for creating,
-            manipulating, and extracting content from PDF files.-->
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.24</version> <!-- Or the latest version -->
-        </dependency>
-
         <dependency>
             <groupId>com.github.jai-imageio</groupId>
             <artifactId>jai-imageio-core</artifactId>
@@ -102,8 +104,20 @@
             <artifactId>commons-compress</artifactId>
             <version>1.21</version>
         </dependency>
+        <!--        EPUB - PDF Dependencies -->
+        <!-- https://mvnrepository.com/artifact/io.documentnode/epub4j-core -->
+        <dependency>
+            <groupId>io.documentnode</groupId>
+            <artifactId>epub4j-core</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+        <!--        Image To Text -->
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>4.5.1</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

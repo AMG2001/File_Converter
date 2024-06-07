@@ -161,3 +161,5 @@ function convertImagesToPdf() {
 
     input.click();
 }
+
+

@@ -1,6 +1,7 @@
 package tech.amg.fileConverter.controller.rest;
 
 
+import org.apache.pdfbox.tools.ImageToPDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -13,7 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.amg.fileConverter.controller.service.EmailService;
 import tech.amg.fileConverter.controller.service.FileConverter;
+import tech.amg.fileConverter.controller.service.converters.Converters;
+import tech.amg.fileConverter.controller.service.converters.EPUB_PDF_Converter;
+import tech.amg.fileConverter.controller.service.converters.ImageToTextConverter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -22,8 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:63342")
+@CrossOrigin(origins = "*")
 public class FileConverterEndPoint {
+
+    @Autowired
+    private ImageToTextConverter imageToTextConverter;
+
+    @Autowired
+    private EPUB_PDF_Converter epub_pdf_converter;
+
 
     @Value("${spring.mail.username}")
     private String email;
@@ -32,6 +44,8 @@ public class FileConverterEndPoint {
     private final FileConverter fileConversionService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private Converters converters;
 
     public FileConverterEndPoint(FileConverter fileConversionService) {
         this.fileConversionService = fileConversionService;
@@ -90,15 +104,34 @@ public class FileConverterEndPoint {
         try {
             System.out.println("Convert images to PDF called");
             // Convert each MultipartFile to a byte array
-            List<byte[]> imagesBytes = new ArrayList<>();
-            for (MultipartFile imageFile : imageFiles) {
-                imagesBytes.add(imageFile.getBytes());
-            }
+            List<byte[]> multipartFilesBytes = converters.convertMulyipartToBytes(imageFiles);
             // Call the service method with the list of byte arrays
-            byte[] pdfBytes = fileConversionService.convertImagesToPdf(imagesBytes);
+            byte[] pdfBytes = fileConversionService.convertImagesToPdf(multipartFilesBytes);
             return ResponseEntity.ok()
                     .header("Content-Disposition", "attachment; filename=converted.pdf")
                     .body(pdfBytes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+//    @PostMapping("/convertEPUBToPDF")
+//    public ResponseEntity<byte[]> convertEPUBToPDF(@RequestParam("file") MultipartFile epubFile) {
+//        try {
+//            byte[] pdfOutput = epub_pdf_converter.convert(epubFile.getInputStream());
+//            return ResponseEntity.ok(pdfOutput);
+//        } catch (IOException e) {
+//            // Log the exception for debugging
+//            System.err.println("Error converting EPUB to PDF: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+    @PostMapping(value = "/getTextFromImage")
+    public ResponseEntity<String> getTextFromImage(@RequestParam("image") MultipartFile imageFile) {
+        try {
+            String imageTextContent = imageToTextConverter.convertImageToText(imageFile.getBytes());
+            return ResponseEntity.ok(imageTextContent);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
